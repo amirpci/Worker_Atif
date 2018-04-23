@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,8 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import amir_alif.m.atif.worker.R;
 
 public class Register extends AppCompatActivity {
-    private EditText Nama, Email, Wa, Password, Re_password;
+    private EditText Nama, Email, Country, Password, Re_password, specialized;
     private Button Register;
+    private Switch expert;
     private FirebaseAuth authUser;
     private DatabaseReference db;
     private ProgressDialog progress;
@@ -34,10 +37,24 @@ public class Register extends AppCompatActivity {
         authUser = FirebaseAuth.getInstance();
         Nama = (EditText)findViewById(R.id.nama_reg);
         Email = (EditText)findViewById(R.id.email_reg);
-        Wa = (EditText)findViewById(R.id.wa_reg);
+        Country = (EditText)findViewById(R.id.country_reg);
+        specialized = (EditText)findViewById(R.id.specialized);
         Password = (EditText)findViewById(R.id.pass_reg);
         Re_password = (EditText)findViewById(R.id.retypepass_reg);
+        expert = (Switch)findViewById(R.id.expert_switch);
         Register = (Button)findViewById(R.id.btn_register);
+        specialized.setVisibility(View.GONE);
+
+        expert.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    specialized.setVisibility(View.VISIBLE);
+                }else{
+                    specialized.setVisibility(View.GONE);
+                }
+            }
+        });
 
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,12 +67,13 @@ public class Register extends AppCompatActivity {
     public void Register(){
         final String Nama_ = Nama.getText().toString().trim();
         final String Email_ = Email.getText().toString().trim();
-        final String Wa_ = Wa.getText().toString().trim();
+        final String Country_ = Country.getText().toString().trim();
         final String Pass = Password.getText().toString().trim();
         final String Re_Pass = Re_password.getText().toString().trim();
+        final String Specialization = specialized.getText().toString().trim();
         char[] cekEmail = Email_.toCharArray();
 
-        if(Nama_.matches("") || Email_.matches("") || Wa_.matches("") || Pass.matches("") || Re_Pass.matches("")){
+        if(Nama_.matches("") || Email_.matches("") || Country_.matches("") || Pass.matches("") || Re_Pass.matches("")){
             Toast.makeText(Register.this, "Fill the blank!", Toast.LENGTH_LONG).show();
         }else if(!cekEmail(cekEmail)){
             Toast.makeText(Register.this, "Wrong email format!", Toast.LENGTH_LONG).show();
@@ -75,7 +93,13 @@ public class Register extends AppCompatActivity {
                         DatabaseReference idRef =  db.child(id_user);
                         idRef.child("Nama").setValue(Nama_);
                         idRef.child("Email").setValue(Email_);
-                        idRef.child("Wa").setValue(Wa_);
+                        idRef.child("Wa").setValue(Country_);
+                        if(expert.isChecked()){
+                            idRef.child("Specialization").setValue(Specialization);
+                            idRef.child("Type").setValue("Expert");
+                        }else{
+                            idRef.child("Type").setValue("Worker");
+                        }
                         progress.dismiss();
                     }else {
                         progress.dismiss();

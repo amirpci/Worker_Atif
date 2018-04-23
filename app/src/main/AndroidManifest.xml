@@ -23,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login_Register.Register"></activity>
+        <activity android:name=".Login_Register.Register" />
+        <activity android:name=".Test_For_Database"></activity>
     </application>
 
 </manifest>

@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="amir_alif.m.atif.worker.Login_Register.Register">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_marginTop="100dp"
         android:layout_width="match_parent"
@@ -33,13 +36,13 @@
             android:padding="5dp" />
 
         <EditText
-            android:id="@+id/wa_reg"
+            android:id="@+id/country_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:ems="10"
-            android:hint="Wa"
-            android:inputType="number"
+            android:hint="Country"
+            android:inputType="text"
             android:padding="5dp" />
 
         <EditText
@@ -56,10 +59,25 @@
             android:id="@+id/retypepass_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="10dp"
             android:ems="10"
             android:hint="Retype password"
             android:inputType="textPassword"
+            android:padding="5dp" />
+
+        <Switch
+            android:id="@+id/expert_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register as Expert" />
+        <EditText
+            android:id="@+id/specialized"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:ems="10"
+            android:hint="Specialization"
+            android:inputType="text"
             android:padding="5dp" />
 
         <Button
@@ -70,4 +88,5 @@
             android:text="Daftar" />
 
     </LinearLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>
