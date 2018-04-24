@@ -73,4 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void addProblem(View v){
+        startActivity(new Intent(MainActivity.this, Share_knowledge.class));
+    }
 }

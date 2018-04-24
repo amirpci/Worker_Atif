@@ -86,6 +86,7 @@ public class Register extends AppCompatActivity {
                 }else{
                     specialized.setVisibility(View.GONE);
                     Sp.setVisibility(View.GONE);
+                    Sp_Q.setVisibility(View.GONE);
                 }
             }
         });
