@@ -6,10 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,10 +28,14 @@ import amir_alif.m.atif.worker.R;
 public class Register extends AppCompatActivity {
     private EditText Nama, Email, Country, Password, Re_password, specialized;
     private Button Register;
+    private TextView Sp_Q;
     private Switch expert;
     private FirebaseAuth authUser;
     private DatabaseReference db;
     private ProgressDialog progress;
+    private Spinner Sp;
+    private String Special;
+    private static final String[] specialization = {"Safety Engineering", "Civil Engineering", "Constructional", "Enviromental Engineering","Materials Science","More Options"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,15 +51,41 @@ public class Register extends AppCompatActivity {
         Re_password = (EditText)findViewById(R.id.retypepass_reg);
         expert = (Switch)findViewById(R.id.expert_switch);
         Register = (Button)findViewById(R.id.btn_register);
+        Sp = (Spinner)findViewById(R.id.specialization_option);
+        Sp_Q = (TextView)findViewById(R.id.sp_Q);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(Register.this,
+                android.R.layout.simple_spinner_item,specialization);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Sp.setAdapter(adapter);
         specialized.setVisibility(View.GONE);
+        Sp.setVisibility(View.GONE);
+        Sp_Q.setVisibility(View.GONE);
+        Sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position==specialization.length-1){
+                    specialized.setVisibility(View.VISIBLE);
+                }else{
+                    Special=specialization[position];
+                    specialized.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         expert.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    specialized.setVisibility(View.VISIBLE);
+                    Sp.setVisibility(View.VISIBLE);
+                    Sp_Q.setVisibility(View.VISIBLE);
                 }else{
                     specialized.setVisibility(View.GONE);
+                    Sp.setVisibility(View.GONE);
                 }
             }
         });
@@ -70,6 +104,7 @@ public class Register extends AppCompatActivity {
         final String Country_ = Country.getText().toString().trim();
         final String Pass = Password.getText().toString().trim();
         final String Re_Pass = Re_password.getText().toString().trim();
+        final String Specialization_ = Special;
         final String Specialization = specialized.getText().toString().trim();
         char[] cekEmail = Email_.toCharArray();
 
@@ -81,7 +116,9 @@ public class Register extends AppCompatActivity {
             Toast.makeText(Register.this, "Password length less then 6.", Toast.LENGTH_LONG).show();
         }else if(!Pass.equals(Re_Pass)){
             Toast.makeText(Register.this, "Password doesn't match!", Toast.LENGTH_LONG).show();
-        } else{
+        } else if(specialized.getVisibility()==View.VISIBLE && Specialization.matches("")){
+            Toast.makeText(Register.this, "Fill the blank!", Toast.LENGTH_LONG).show();
+        }else {
             progress.setMessage("Registring...!");
             progress.show();
             authUser.createUserWithEmailAndPassword(Email_, Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -95,7 +132,11 @@ public class Register extends AppCompatActivity {
                         idRef.child("Email").setValue(Email_);
                         idRef.child("Wa").setValue(Country_);
                         if(expert.isChecked()){
-                            idRef.child("Specialization").setValue(Specialization);
+                            if(specialized.getVisibility()==View.VISIBLE) {
+                                idRef.child("Specialization").setValue(Specialization);
+                            }else{
+                                idRef.child("Specialization").setValue(Specialization_);
+                            }
                             idRef.child("Type").setValue("Expert");
                         }else{
                             idRef.child("Type").setValue("Worker");

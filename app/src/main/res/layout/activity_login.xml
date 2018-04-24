@@ -34,13 +34,25 @@
             android:hint="password"
             android:inputType="textPassword"
             android:padding="7dp" />
-        <Button
-            android:id="@+id/btn_login"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="Login" />
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Login" />
+            <Button
+                android:id="@+id/btn_login_expert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Login as Expert"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_gravity="center"
