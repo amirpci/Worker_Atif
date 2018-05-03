@@ -141,7 +141,11 @@ public class Register extends AppCompatActivity {
                             idRef.child("Type").setValue("Expert");
                         }else{
                             idRef.child("Type").setValue("Worker");
+                            idRef.child("Specialization").setValue("-");
                         }
+                        idRef.child("Score").child("Answered").setValue("0");
+                        idRef.child("Score").child("Rater").setValue("0");
+                        idRef.child("Score").child("Rating").setValue("0");
                         progress.dismiss();
                     }else {
                         progress.dismiss();

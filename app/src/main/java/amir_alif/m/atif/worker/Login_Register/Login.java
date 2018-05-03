@@ -30,7 +30,7 @@ import amir_alif.m.atif.worker.R;
 public class Login extends AppCompatActivity {
     private EditText Email,Password;
     private TextView Register;
-    private Button Login,LoginExpert;
+    private Button Login;
     private ProgressDialog progress;
     private FirebaseAuth authUser;
     private FirebaseAuth.AuthStateListener authListener;
@@ -44,7 +44,7 @@ public class Login extends AppCompatActivity {
         Email=(EditText)findViewById(R.id.email_login);
         Password=(EditText)findViewById(R.id.pass_login);
         Login=(Button)findViewById(R.id.btn_login);
-        LoginExpert = (Button)findViewById(R.id.btn_login_expert);
+       // LoginExpert = (Button)findViewById(R.id.btn_login_expert);
         Register=(TextView) findViewById(R.id.register_login);
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -66,12 +66,13 @@ public class Login extends AppCompatActivity {
 
         });
 
-        LoginExpert.setOnClickListener(new View.OnClickListener() {
+       /* LoginExpert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LoginExpert();
             }
         });
+        */
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,7 +109,7 @@ public class Login extends AppCompatActivity {
 
 
     }
-
+/*
     public void LoginExpert(){
         if(Email.getText().toString().matches("") || Password.getText().toString().matches("")){
             Toast.makeText(Login.this, "Mohon isi dengan benar!", Toast.LENGTH_LONG).show();
@@ -169,6 +170,7 @@ public class Login extends AppCompatActivity {
             });
         }
     }
+    */
     @Override
     protected void onStart() {
         super.onStart();

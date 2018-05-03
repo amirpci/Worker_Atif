@@ -1,64 +1,132 @@
 package amir_alif.m.atif.worker;
 
-import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import amir_alif.m.atif.worker.Login_Register.Login;
-import amir_alif.m.atif.worker.Tab_Menu.Problem;
-import amir_alif.m.atif.worker.Tab_Menu.Profile;
-import amir_alif.m.atif.worker.Tab_Menu.ToBeAnswered;
+import amir_alif.m.atif.worker.Tab_Menu.JawabAct;
+import amir_alif.m.atif.worker.Tab_Menu.ProfileAct;
+import amir_alif.m.atif.worker.Tab_Menu.TanyaAct;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPagerAdapter adapter;
-    private ViewPager mViewPager;
-    private TabLayout tabLayout;
-    private int[] tabIcons = {R.drawable.profile ,R.drawable.problem,R.drawable.to_be_reviewed};
+    LinearLayout tmb_Profile;
+    ImageView garis_Profile;
+
+    LinearLayout tmb_Tanya;
+    ImageView garis_Tanya;
+
+    LinearLayout tmb_Jawab;
+    ImageView garis_Jawab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // logout = (Button)findViewById(R.id.logout_btn);
-        //helloworld = (TextView)findViewById(R.id.helloworld);
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        final int tmbTab[][] = {{R.id.tab_profile_ikon, R.id.tab_tanya_ikon, R.id.tab_jawab_ikon},
+                {R.id.tab_profile_garis, R.id.tab_tanya_garis, R.id.tab_jawab_garis}};
+        final int warnaTab[][] = {{R.color.colorAccent, R.color.colorPrimaryDark},
+                {R.color.colorPrimary, R.color.colorPrimaryDark}};
 
-        adapter.AddFragment(new Profile(), "");
-        adapter.AddFragment(new Problem(), "");
-        adapter.AddFragment(new ToBeAnswered(), "");
-        mViewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(mViewPager);
+        final ImageView icon_Profile = (ImageView) findViewById(R.id.tab_profile_ikon);
+        garis_Profile = (ImageView) findViewById(R.id.tab_profile_garis);
 
-        tabLayout.setupWithViewPager(mViewPager);
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            tabLayout.getTabAt(i).setIcon(tabIcons[i]);
-        }
+
+        tmb_Profile = (LinearLayout) findViewById(R.id.tab_profile);
+        tmb_Tanya = (LinearLayout) findViewById(R.id.tab_tanya);
+        tmb_Jawab = (LinearLayout) findViewById(R.id.tab_jawab);
+
+//        garis_Profile= (ImageView) findViewById(R.id.tab_profile_garis);
+        tmb_Profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tampilkan(new ProfileAct());
+                pesan("Let\'s set up your Profile!");
+                saringTerpilih(tmbTab[0], (ImageView) findViewById(R.id.tab_profile_ikon), warnaTab[0],
+                        tmbTab[1], (ImageView) findViewById(R.id.tab_profile_garis), warnaTab[1]);
+            }
+        });
+
+//        garis_Tanya= (ImageView) findViewById(R.id.tab_tanya_garis);
+        tmb_Tanya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tampilkan(new TanyaAct());
+                pesan("Wanna ask something?");
+                saringTerpilih(tmbTab[0], (ImageView) findViewById(R.id.tab_tanya_ikon), warnaTab[0],
+                        tmbTab[1], (ImageView) findViewById(R.id.tab_tanya_garis), warnaTab[1]);
+            }
+        });
+
+//        garis_Jawab= (ImageView) findViewById(R.id.tab_jawab_garis);
+        tmb_Jawab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tampilkan(new JawabAct());
+                pesan("You\'ve got a new message!");
+                saringTerpilih(tmbTab[0], (ImageView) findViewById(R.id.tab_jawab_ikon), warnaTab[0],
+                        tmbTab[1], (ImageView) findViewById(R.id.tab_jawab_garis), warnaTab[1]);
+            }
+        });
 
     }
 
+    void tampilkan(Fragment frag) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.layout_wadah_fragment, frag);
+        ft.commit();
+    }
+
+    void saringTerpilih(int id[], ImageView img) {
+        // warna[0]= belum; warna[1]= terpilih;
+        int warna[] = {R.color.colorAccent, R.color.colorPrimaryDark};
+        saringTerpilih(id, img, warna);
+    }
+
+    void saringTerpilih(int id[], ImageView img, int warna[]) {
+        ImageView imgLain;
+        for (int i = 0; i < id.length; i++) {
+            imgLain = (ImageView) findViewById(id[i]);
+            imgLain.setColorFilter(ambilWarna(warna[0]));
+        }
+        img.setColorFilter(ambilWarna(warna[1]));
+    }
+
+    void saringTerpilih(int id[], ImageView img, int idBg[], ImageView bg) {
+        // warna[0]= belum; warna[1]= terpilih;
+        int warna[] = {R.color.colorAccent, R.color.colorPrimaryDark};
+        int warnaBg[] = {R.color.colorAccent, R.color.colorPrimaryDark};
+        saringTerpilih(id, img, warna, idBg, bg, warnaBg);
+    }
+
+    void saringTerpilih(int id[], ImageView img, int warna[], int idBg[], ImageView bg, int warnaBg[]) {
+        ImageView imgLain;
+        for (int i = 0; i < id.length; i++) {
+            imgLain = (ImageView) findViewById(id[i]);
+            imgLain.setColorFilter(ambilWarna(warna[0]));
+        }
+        img.setColorFilter(ambilWarna(warna[1]));
+
+        ImageView bgLain;
+        for (int i = 0; i < id.length; i++) {
+            bgLain = (ImageView) findViewById(idBg[i]);
+            bgLain.setBackgroundColor(ambilWarna(warnaBg[0]));
+        }
+        bg.setBackgroundColor(ambilWarna(warnaBg[1]));
+    }
+
+    int ambilWarna(int id) {
+        return getResources().getColor(id);
+    }
+
+    void pesan(String pesan) {
+        Toast.makeText(this, pesan, Toast.LENGTH_LONG).show();
+    }
 }
