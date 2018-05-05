@@ -1,5 +1,8 @@
 package amir_alif.m.atif.worker;
 
+import android.content.Intent;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout tmb_Jawab;
     ImageView garis_Jawab;
 
+    private boolean click_duaKali=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,5 +132,33 @@ public class MainActivity extends AppCompatActivity {
 
     void pesan(String pesan) {
         Toast.makeText(this, pesan, Toast.LENGTH_LONG).show();
+    }
+    public void onBackPressed() {
+        if(click_duaKali){
+            Intent i = new Intent(Intent.ACTION_MAIN);
+            i.addCategory(Intent.CATEGORY_HOME);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+            System.exit(0);
+        }
+        Toast.makeText(MainActivity.this, "Press BACK again to exit!", Toast.LENGTH_LONG).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                click_duaKali=false;
+            }
+        },3000);
+        click_duaKali=true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
