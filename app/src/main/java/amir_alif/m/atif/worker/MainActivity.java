@@ -46,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
         tmb_Tanya = (LinearLayout) findViewById(R.id.tab_tanya);
         tmb_Jawab = (LinearLayout) findViewById(R.id.tab_jawab);
 
+
+        //Buat Warna Inisiasi
+        saringTerpilih(tmbTab[0], (ImageView) findViewById(R.id.tab_profile_ikon), warnaTab[0],
+                tmbTab[1], (ImageView) findViewById(R.id.tab_profile_garis), warnaTab[1]);
+
 //        garis_Profile= (ImageView) findViewById(R.id.tab_profile_garis);
         tmb_Profile.setOnClickListener(new View.OnClickListener() {
             @Override
