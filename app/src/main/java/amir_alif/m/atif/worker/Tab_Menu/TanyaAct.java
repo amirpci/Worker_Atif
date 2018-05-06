@@ -45,12 +45,12 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class TanyaAct extends Fragment {
-    private LinearLayout relatedQuestion, addQuestion;
+    private LinearLayout relatedQuestion, addQuestion, loading;
     private EditText search_input,question_input;
     private TextView fileName;
     private ImageView search_btn, uploadPhoto, uploadedPhoto;
     private Button add_question;
-    private ProgressBar uploadPhotoProgress, loading;
+    private ProgressBar uploadPhotoProgress;
     private ProgressDialog addQuestionLoading;
     private DatabaseReference dataRef;
     private StorageReference storageRef;
@@ -75,7 +75,7 @@ public class TanyaAct extends Fragment {
         uploadedPhoto = (ImageView)v.findViewById(R.id.tanya_uploaded_photo);
         add_question = (Button)v.findViewById(R.id.tanya_addQuestion_btn);
         uploadPhotoProgress = (ProgressBar) v.findViewById(R.id.tanya_upPhoto_loading);
-        loading = (ProgressBar)v.findViewById(R.id.tanya_progress);
+        loading = (LinearLayout)v.findViewById(R.id.tanya_progress);
 
         relatedQuestion.setVisibility(View.GONE);
         addQuestion.setVisibility(View.GONE);
@@ -86,7 +86,7 @@ public class TanyaAct extends Fragment {
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loading.animate().alpha(0.0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                loading.animate().translationY(0).alpha(0.0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         loading.setVisibility(View.GONE);
@@ -118,7 +118,9 @@ public class TanyaAct extends Fragment {
                     addQuestionLoading.show();
                     if(tambahPertanyaan()){
                         addQuestionLoading.dismiss();
+                        Toast.makeText(getActivity(), "Question added!", Toast.LENGTH_SHORT).show();
                         transisiFadeOutBawah(addQuestion);
+                        transisiFadeIn(loading);
                     }
                 }
             }

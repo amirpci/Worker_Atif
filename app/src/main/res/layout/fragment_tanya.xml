@@ -274,15 +274,26 @@
                     android:layout_gravity="center"
                     android:text="Add now"/>
             </LinearLayout>
-            <ProgressBar
-                android:id="@+id/tanya_progress"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:background="@color/primary_white"
-                android:layout_marginTop="10dp"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:indeterminate="true"
-                android:layout_gravity="center_horizontal"
-                />
+                android:id="@+id/tanya_progress">
+                <TextView
+                    android:layout_margin="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="test: keyword : &quot;ada&quot; untuk hasil ada related,\n keyword lainnya untuk menambahkan pertanyaan baru "/>
+                <ProgressBar
+                    android:layout_marginTop="10dp"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:indeterminate="true"
+                    android:layout_gravity="center_horizontal"
+                    />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
